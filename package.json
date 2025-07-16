@@ -1,0 +1,28 @@
+{
+  "name": "bike_and_scooter_rental_system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shivam16a/BIKE_AND_CSOOTER_RENTER_SYSTEM.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shivam16a/BIKE_AND_CSOOTER_RENTER_SYSTEM/issues"
+  },
+  "homepage": "https://github.com/Shivam16a/BIKE_AND_CSOOTER_RENTER_SYSTEM#readme",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.3",
+    "multer": "^2.0.1",
+    "nodemon": "^3.1.10"
+  }
+}
