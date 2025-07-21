@@ -24,7 +24,7 @@ const Home = () => {
                 List
               </Link>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a className="dropdown-item" href="#">Bikes</a>
+                <Link className="dropdown-item" to="/vehiclelist">Bikes</Link>
                 <a className="dropdown-item" href="#">Scooters</a>
                 <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href="#">Bycicle</a>
