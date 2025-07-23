@@ -1,0 +1,68 @@
+.form-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+.vehicle-form {
+  background-color: #fff;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.modern-input {
+  height: 45px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  transition: all 0.3s ease;
+}
+
+.modern-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+.close-icon {
+  color: #6c757d;
+  font-size: 20px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.close-icon:hover {
+  color: #dc3545;
+}
+
+
+/* vehicle list code */
+
+.vehicle-card {
+  background-color: #1c1c1e;
+  color: #f1f1f1;
+  border: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.vehicle-card .card-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.vehicle-card .card-text {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.vehicle-card .card-footer {
+  background-color: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

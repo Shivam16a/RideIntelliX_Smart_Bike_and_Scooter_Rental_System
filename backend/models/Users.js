@@ -1,23 +1,28 @@
 const mongoose = require("mongoose");
 
 const users = new mongoose.Schema({
-    name : {
-        type : String,
-        required:true
+    name: {
+        type: String,
+        required: true
     },
-    location : {
-        type : String,
-        required:true
+    vehicletype: {
+        type: String,
+        enum: ['Bike','Car','scooter'],
+        default:'Bike'
     },
-    status : {
-        type : String,
-        enum : ["active","inactive"],
-        default:"active" 
+    location: {
+        type: String,
+        required: true
     },
-    createdAt : {
-        type : Date,
+    status: {
+        type: String,
+        enum: ['available', 'rented', 'maintenance'],
+        default: 'available'
+    },
+    createdAt: {
+        type: Date,
         default: Date.now
     }
 });
 
-module.exports = mongoose.model("users",users);
+module.exports = mongoose.model("users", users);

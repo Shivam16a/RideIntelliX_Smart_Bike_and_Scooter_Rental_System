@@ -1,42 +1,62 @@
-import React, { useState } from "react";
-const VehicleForm = ({ addVehicle }) => {
-  const [form, setForm] = useState({
-    name: "",
-    type: "",
-    fuel: "",
-    price: "",
-    imageUrl: "",
-    location: ""
-  });
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import { Link } from 'react-router-dom';
+import '../Index.css'; // Import custom CSS
 
-  const handleChange = (e) => {
+const Vehicleform = ({ fetchclient, selectedclient, setSelectedclient }) => {
+  const [form, setForm] = useState({ name: "", vehicletype: "", location: "", status: "" });
+
+  useEffect(() => {
+    if (selectedclient) setForm(selectedclient);
+  }, [selectedclient]);
+
+  const hc = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const hs = async (e) => {
     e.preventDefault();
-    addVehicle(form);
-    setForm({
-      name: "",
-      type: "",
-      fuel: "",
-      price: "",
-      imageUrl: "",
-      location: ""
-    });
+    if (selectedclient) {
+      await axios.put(`http://localhost:5700/api/users/${selectedclient._id}`, form);
+      setSelectedclient(null);
+    } else {
+      await axios.post('http://localhost:5700/api/users', form);
+    }
+    setForm({ name: "", vehicletype: "", location: "", status: "" });
+    fetchclient();
   };
 
-  return <>
-    <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
-      <input name="name" placeholder="Vehicle Name" value={form.name} onChange={handleChange} />
-      <input name="type" placeholder="Type (Bike/Scooter)" value={form.type} onChange={handleChange} />
-      <input name="fuel" placeholder="Fuel Type" value={form.fuel} onChange={handleChange} />
-      <input name="price" placeholder="Price/Day" value={form.price} onChange={handleChange} />
-      <input name="imageUrl" placeholder="Image URL" value={form.imageUrl} onChange={handleChange} />
-      <input name="location" placeholder="Location" value={form.location} onChange={handleChange} />
-      <button type="submit">Add Vehicle</button>
-    </form>
+  return<>
+      <div className="form-container d-flex justify-content-center align-items-center">
+      <form className="vehicle-form shadow p-4 rounded" onSubmit={hs}>
+        <div className="d-flex justify-content-end">
+          <Link to='/' className="close-icon">
+            <i className="fas fa-times"></i>
+          </Link>
+        </div>
+
+        <h3 className="text-center mb-4">{selectedclient ? "Update Details" : "Add User"}</h3>
+
+        {["name", "vehicletype", "location", "status"].map((field, idx) => (
+          <div className='form-group mb-3' key={idx}>
+            <label className='form-label text-capitalize'>{field}:</label>
+            <input
+              type='text'
+              name={field}
+              placeholder={`Enter ${field}...`}
+              onChange={hc}
+              className='form-control modern-input'
+              value={form[field]}
+            />
+          </div>
+        ))}
+
+        <button type='submit' className="btn btn-primary w-100 mt-3">
+          {selectedclient ? "Update" : "Add"} Client
+        </button>
+      </form>
+    </div>
   </>
 };
 
-export default VehicleForm;
+export default Vehicleform;

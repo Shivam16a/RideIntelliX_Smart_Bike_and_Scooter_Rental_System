@@ -1,41 +1,42 @@
-import React from "react";
-import { Table, Button, Image } from "react-bootstrap";
+import React from 'react'
+import axios from 'axios'
 
-const VehicleList = ({ vehicles, deleteVehicle }) => {
-  return (
-    <Table striped bordered hover responsive>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Fuel</th>
-          <th>Price</th>
-          <th>Image</th>
-          <th>Location</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {vehicles.map((v, i) => (
-          <tr key={i}>
-            <td>{v.name}</td>
-            <td>{v.type}</td>
-            <td>{v.fuel}</td>
-            <td>₹{v.price}</td>
-            <td>
-              <Image src={v.imageUrl} alt={v.name} width="100" thumbnail />
-            </td>
-            <td>{v.location}</td>
-            <td>
-              <Button variant="danger" onClick={() => deleteVehicle(i)}>
+const Vehiclelist = ({clients,fetchclients,setSelectedclient}) => {
+ const deleteclient = async(id)=> {
+  await axios.delete(`http://localhost:5700/api/users/${id}`);
+  fetchclients();
+ }
+
+  return <>
+  <div className="row">
+      {clients.map((x) => (
+        <div className="col-md-4 mb-4" key={x._id}>
+          <div className="card text-white bg-dark h-100">
+            <div className="card-body">
+              <h5 className="card-title">{x.name}</h5>
+              <p className="card-text"><strong>Vehicle Type:</strong> {x.vehicletype}</p>
+              <p className="card-text"><strong>Location:</strong> {x.location}</p>
+              <p className="card-text"><strong>Status:</strong> {x.status}</p>
+            </div>
+            <div className="card-footer d-flex justify-content-between">
+              <button
+                className="btn btn-sm btn-light"
+                onClick={()=>setSelectedclient(x)}
+              >
+                Edit
+              </button>
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={()=>deleteclient(x._id)}
+              >
                 Delete
-              </Button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  );
-};
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </>
+}
 
-export default VehicleList;
+export default Vehiclelist
