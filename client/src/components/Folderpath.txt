@@ -43,3 +43,34 @@ rideintellix-frontend/
 ├── .env (Environment variables for API keys, etc.)
 ├── package.json
 └── vite.config.js
+
+
+
+
+✅ Backend Folder Structure (with Node.js & Express)
+backend/
+├── config/
+│   └── db.js               # Database connection
+├── controllers/
+│   ├── authController.js
+│   ├── vehicleController.js
+│   ├── bookingController.js
+│   └── paymentController.js
+├── middleware/
+│   ├── authMiddleware.js   # JWT auth
+│   └── errorMiddleware.js
+├── models/
+│   ├── User.js
+│   ├── Vehicle.js
+│   ├── Booking.js
+│   ├── Payment.js
+│   └── Review.js (optional)
+├── routes/
+│   ├── authRoutes.js
+│   ├── vehicleRoutes.js
+│   ├── bookingRoutes.js
+│   └── paymentRoutes.js
+├── uploads/                # for image uploads (optional)
+├── .env
+├── server.js
+└── package.json
