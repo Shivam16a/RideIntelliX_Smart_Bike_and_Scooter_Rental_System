@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Vehiclelist from '../vehicles/Vehiclelist';
-
 
 const Home = () => {
   const [clients, setClients] = useState([]);
-  const [selectedclient, setSelectedClient] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
 
   const fetchClients = async () => {
     const res = await axios.get('http://localhost:5700/api/users');
@@ -23,7 +19,6 @@ const Home = () => {
   const filteredClients = clients.filter((client) =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
 
   return <>
     <nav className="navbar navbar-expand-lg navbar-light px-4 nav">
@@ -40,16 +35,18 @@ const Home = () => {
           <li className="nav-item">
             <Link className="nav-link at" to="/about">About</Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link at" to="/about">Profile</Link>
+          </li>
           <li className="nav-item dropdown">
-
             <Link className="nav-link dropdown-toggle lts" to="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               List
             </Link>
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <Link className="dropdown-item" to="/vehiclelist">Bikes</Link>
-              <a className="dropdown-item" href="#">Scooters</a>
+              <Link className="dropdown-item" to="/ridehistory">Bikes</Link>
+              <Link className="dropdown-item" to="/wallet">Scooters</Link>
               <div className="dropdown-divider"></div>
-              <a className="dropdown-item" href="#">Bycicle</a>
+              <Link className="dropdown-item" to="/userprofile">Bicycle</Link>
             </div>
           </li>
           <li className="nav-item">
@@ -63,27 +60,10 @@ const Home = () => {
           />
           <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
-        <Link to="/login"><i class="far fa-user login"></i></Link>
+        <Link to="/login"><i className="far fa-user login"></i></Link>
       </div>
     </nav>
-    <div className="container mt-4">
-      <h2 className="mb-3">Users Details</h2>
-      <Vehiclelist
-        clients={filteredClients}
-        fetchclients={fetchClients}
-        setSelectedclient={setSelectedClient}
-      />
-    </div>
-    {selectedclient && (
-      <div className="overlay">
-        <Vehicleform
-          fetchclient={fetchClients}
-          selectedclient={selectedclient}
-          setSelectedclient={setSelectedClient}
-        />
-      </div>
-    )}
   </>
 }
 
-export default Home
+export default Home;

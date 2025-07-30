@@ -1,10 +1,4 @@
-Aap ek **vehicle rental platform** bana rahe hain jisme **frontend React** mein hoga aur aap backend ke liye **data structure aur folder organization** jaanna chahte hain. Chaliye isko step-by-step breakdown karte hain:
-
----
-
 ## ✅ Backend Requirements: Kya Data Chahiye?
-
-Ek vehicle rental platform mein aapko kai tarah ke data entities handle karne honge:
 
 ### 1. **Users**
 
@@ -38,7 +32,7 @@ Ek vehicle rental platform mein aapko kai tarah ke data entities handle karne ho
 * VehicleID (FK)
 * Pickup Location
 * Drop Location
-* Start Date & Time
+* Start Date & Time 
 * End Date & Time
 * Total Amount
 * Booking Status (Pending, Confirmed, Cancelled, Completed)

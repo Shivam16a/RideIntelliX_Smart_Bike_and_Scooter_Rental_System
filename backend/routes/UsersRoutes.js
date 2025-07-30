@@ -1,60 +1,25 @@
-const express = require("express");
-const route = express.Router();
-const users = require("../models/Users");
+const express = require('express');
+const router = express.Router();
+const authctrl = require('../controllers/authController');
+const authMiddleware = require('../middleware/authMiddleware');
+const user = require('../models/Users');
 
-//Insert 
-route.post("/", async (req, res) => {
-    try {
-        const user = new users(req.body);
-        await user.save();
-        res.status(200).json(user)
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-});
+router.post('/register', authctrl.register);
+router.post('/login',authctrl.login);
+router.get('/dashbord',authctrl.dashboard);
 
-//View 
-route.get("/", async (req, res) => {
+router.get("/reg-user", async (req, res) => {
     try {
-        const User = await users.find();
+        const User = await user.find({
+            name: { $exists: true, $ne: "" },
+            email: { $exists: true, $ne: "" },
+            phone: { $exists: true, $ne: "" },
+            address: { $exists: true, $ne: "" }
+        }).select("-password");
         res.status(200).json(User)
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 });
 
-//Single View
-route.get("/", async (req, res) => {
-    try {
-        const user = await users.findById(req.params.id);
-        if (!user) return res.status(400).json({ message: "Users not found" });
-        res.status(200).json(user)
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-});
-
-//Update
-route.put("/:id", async (req, res) => {
-    try {
-        const user = await users.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!user) return res.status(400).json({ message: "users not found" });
-        res.status(200).json(user);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-});
-
-//Delete
-route.delete("/:id", async(req,res)=>{
-    try {
-        const user = await users.findByIdAndDelete(req.params.id);
-        if(!user) return res.status(400).json({message:"user not found"});
-        res.json({message:"user deleted"});
-    }
-    catch(err) {
-        res.status(400).json({error:err.message});
-    }
-});
-
-module.exports = route;
+module.exports = router;
