@@ -1,49 +1,82 @@
-import React from 'react'
-import '../App.css'
-import { Link } from 'react-router-dom'
+import { useState } from 'react';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const [form, setForm] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
+  const hc = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-  
+  const hs = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('http://localhost:5700/api/auth/login', form);
+      localStorage.setItem('token', res.data.token);
+      navigate('/dashboard');
+    } catch (err) {
+      alert('Login failed');
+      console.error(err);
+    }
+  };
+
   return <>
-    <div className="container d-flex align-items-center justify-content-center min-vh-100">
-        <div className="card shadow-sm log" style={{ width: '100%', maxWidth: '400px' }}>
-            <Link to={'/'}><i class="fas fa-times cut-btn"></i></Link>
-          <div className="card-body">
-            <h4 className="card-title text-center mb-4">Login</h4>
-            <form>
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label">Email address</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  placeholder="Enter email"
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  placeholder="Enter password"
-                  required
-                />
-              </div>
-              <div className="d-grid">
-                <button type="submit" className="btn btn-primary">Login</button>
-              </div>
-            </form>
-            <p className="text-center mt-3 mb-0">
-              <Link to="/">Forgot password?</Link> <span><Link className='cna' to={'/register'}> Create new account</Link></span>
-            </p>
-          </div>
-        </div>
-      </div>
-  </>
-}
+    <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+      <form
+        onSubmit={hs}
+        className="bg-white p-5 rounded-4 shadow-lg w-100"
+        style={{ maxWidth: '420px' }}
+      >
+        <h2 className="text-center mb-4 text-primary">
+          <i className="fas fa-sign-in-alt me-2"></i>
+          Login
+        </h2>
 
-export default Login
+        {/* Email */}
+        <div className="mb-3">
+          <label className="form-label">
+            <i className="fas fa-envelope me-2 text-secondary"></i>
+            Email
+          </label>
+          <input
+            type="email"
+            name="email"
+            className="form-control"
+            placeholder="Enter your email"
+            onChange={hc}
+            required
+          />
+        </div>
+
+        {/* Password */}
+        <div className="mb-4">
+          <label className="form-label">
+            <i className="fas fa-lock me-2 text-secondary"></i>
+            Password
+          </label>
+          <input
+            type="password"
+            name="password"
+            className="form-control"
+            placeholder="Enter your password"
+            onChange={hc}
+            required
+          />
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="btn btn-primary w-100 fw-bold shadow-sm"
+        >
+          <i className="fas fa-sign-in-alt me-2"></i>
+          Login
+        </button>
+        <span>Forgot password <Link to={'/register'}> Create Account</Link></span>
+      </form>
+    </div>
+  </>
+};
+
+export default Login;

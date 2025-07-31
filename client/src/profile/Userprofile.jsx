@@ -1,58 +1,74 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 const UserProfile = () => {
-  const [user, setUser] = useState(null);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    // Simulated API call (replace with real API in production)
-    const fetchUser = async () => {
-      const mockUser = {
-        name: 'Amit Sharma',
-        email: 'amit.sharma@gmail.com',
-        phone: '+91 9876543210',
-        address: 'MG Road, Bengaluru, India',
-        avatar: 'https://i.pravatar.cc/150?img=5',
-        currentRental: {
-          vehicleType: 'Scooter',
-          model: 'Honda Activa 6G',
-          rentedOn: '2025-07-25',
-          returnDue: '2025-07-30',
-        }
-      };
-
-      setTimeout(() => {
-        setUser(mockUser);
-      }, 1000);
-    };
-
-    fetchUser();
+    fetch("http://localhost:5700/api/auth/reg-user")
+      .then((res) => res.json())
+      .then((data) => setUsers(data))
+      .catch((err) => console.error("Error fetching user data:", err));
   }, []);
 
-  if (!user) return <div>Loading Profile...</div>;
+  return <>
+    <div className="container mt-5 pt-5">
+      <h2 className="mb-4 fw-bold text-primary">User Profiles</h2>
 
-  return (
-    <div className="user-profile-container">
-      <div className="profile-card">
-        <img src={user.avatar} alt="User Avatar" className="avatar" />
-        <h2>{user.name}</h2>
-        <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Phone:</strong> {user.phone}</p>
-        <p><strong>Address:</strong> {user.address}</p>
+      <div className="row">
+        {users.map((user, index) => {
+          const {
+            name,
+            phone,
+            address,
+            profileImage,
+            createdAt,
+          } = user;
+
+          const initials = name?.charAt(0).toUpperCase();
+
+          return (
+            <div className="col-md-6 mb-4" key={index}>
+              <div className="card shadow-sm">
+                <div className="card-body d-flex align-items-center">
+                  {profileImage ? (
+                    <img
+                      src={profileImage}
+                      alt="Profile"
+                      className="rounded-circle me-3"
+                      style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <div
+                      className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
+                      style={{ width: "60px", height: "60px", fontSize: "1.5rem" }}
+                    >
+                      {initials}
+                    </div>
+                  )}
+
+                  <div>
+                    <h5 className="card-title mb-1">{name}</h5>
+                    <p className="mb-1 text-muted">
+                      <i className="fas fa-phone-alt me-2"></i>
+                      {phone || "N/A"}
+                    </p>
+                    <p className="mb-1 text-muted">
+                      <i className="fas fa-map-marker-alt me-2"></i>
+                      {address || "N/A"}
+                    </p>
+                    <p className="mb-0 text-muted">
+                      <i className="fas fa-clock me-2"></i>
+                      Joined: {new Date(createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
-
-      {user.currentRental ? (
-        <div className="rental-info">
-          <h3>Current Rental</h3>
-          <p><strong>Vehicle:</strong> {user.currentRental.vehicleType}</p>
-          <p><strong>Model:</strong> {user.currentRental.model}</p>
-          <p><strong>Rented On:</strong> {user.currentRental.rentedOn}</p>
-          <p><strong>Return Due:</strong> {user.currentRental.returnDue}</p>
-        </div>
-      ) : (
-        <p>No active rentals.</p>
-      )}
     </div>
-  );
+  </>
 };
 
 export default UserProfile;
