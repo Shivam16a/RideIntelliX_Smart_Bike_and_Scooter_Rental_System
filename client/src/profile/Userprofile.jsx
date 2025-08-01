@@ -11,7 +11,7 @@ const UserProfile = () => {
   }, []);
 
   return <>
-    <div className="container mt-5 pt-5">
+    <div className="container " style={{margin:"90px"}}>
       <h2 className="mb-4 fw-bold text-primary">User Profiles</h2>
 
       <div className="row">

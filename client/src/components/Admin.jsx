@@ -8,7 +8,7 @@ const Admin = () => {
   const [seletedclient, setSelectedclient] = useState(null);
 
   const fetchclients = async () => {
-    const res = await axios.get('http://localhost:5700/api/users');
+    const res = await axios.get('http://localhost:5700/api/vehicle');
     setClients(res.data);
   };
   useEffect(() => {

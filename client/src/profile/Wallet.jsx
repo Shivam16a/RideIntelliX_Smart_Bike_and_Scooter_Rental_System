@@ -32,7 +32,7 @@ const Wallet = () => {
   };
 
   return (
-    <div className="wallet-container">
+    <div className="wallet-container" style={{margin:"90px"}}>
       <h2>My Wallet</h2>
       <div className="wallet-balance">
         <p>Current Balance: <strong>₹{balance.toFixed(2)}</strong></p>

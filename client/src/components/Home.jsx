@@ -12,9 +12,10 @@ const Home = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
+      
       if (token) {
         try {
-          const res = await axios.get('http://localhost:5700/api/auth/get-user', {
+          const res = await axios.get('http://localhost:5700/api/auth/reg-user', {
             headers: { Authorization: `Bearer ${token}` }
           });
           setUser(res.data.user);
@@ -34,6 +35,13 @@ const Home = () => {
     setUser(null);
     navigate('/login');
   };
+
+  //my logic
+  // if(token !== null){
+    
+  // }
+
+
   return <>
     <nav className="navbar navbar-expand-lg navbar-light px-4 nav">
       <Link className="navbar-brand titl" to="#"><span className='title1'>Ride</span>Intelli<span className='title2'>X</span></Link>
@@ -61,11 +69,12 @@ const Home = () => {
               <Link className="dropdown-item" to="/wallet">Scooters</Link>
               <div className="dropdown-divider"></div>
               <Link className="dropdown-item" to="/userprofile">Bicycle</Link>
+              <Link className="dropdown-item" to="/card">card</Link>
             </div>
           </li>
           <li className="nav-item">
             <Link className="nav-link cnt" to="/admin">Contact</Link>
-             <button onClick={handleLogout}>Logout</button>
+             
           </li>
         </ul>
         <form className="form-inline my-2 my-lg-0" onSubmit={(e) => e.preventDefault()}>
@@ -79,7 +88,7 @@ const Home = () => {
             {user ? (
               <>
                 <span className="mr-3 text-dark">
-                  <i className="fas fa-user-circle mr-1 text-prime"></i> {user.name}
+                  <i className="fas fa-user-circle mr-1 text-prime" id='user'></i> {user.email}
                 </span>
                 <button onClick={handleLogout} className="btn btn-sm btn-outline-dark">Logout</button>
               </>
@@ -89,7 +98,7 @@ const Home = () => {
               </Link>
             )}
           </div>
-
+<button onClick={handleLogout}>Logout</button>
       </div>
     </nav>
   </>

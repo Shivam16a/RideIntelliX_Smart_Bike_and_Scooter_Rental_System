@@ -5,6 +5,8 @@ const connectdb = require("./config/db");
 const VehicleRoutes = require("./routes/vehicleRoutes");
 const autRoutes = require('./routes/UsersRoutes');
 const booking = require('./routes/bookingRoutes');
+const path = require('path');
+
 
 const errorMiddleware = require('./middleware/errorMiddleware');
 
@@ -13,7 +15,9 @@ connectdb();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api/users",VehicleRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/api/vehicle",VehicleRoutes);
 app.use("/api/auth",autRoutes);
 app.use("/api/booking",booking);
 

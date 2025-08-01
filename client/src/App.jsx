@@ -6,6 +6,7 @@ import Login from './auth/Login';
 import Register from './auth/Register';
 import Admin from './components/Admin';
 import RideHistory from './profile/RideHistory';
+import Card from './cards/Card';
 const App = () => {
   const [searchTerm, setSearchTerm] = React.useState("");
   return <>
@@ -16,6 +17,7 @@ const App = () => {
       <Route path='/register' element={<Register />} />
       <Route path='/admin' element={<Admin/>}/>
       <Route path='/ridehistory' element={<RideHistory/>}/>
+      <Route path='/card' element={<Card/>}/>
     </Routes>
   </BrowserRouter>
 

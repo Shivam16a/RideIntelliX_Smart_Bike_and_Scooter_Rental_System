@@ -41,11 +41,11 @@ const RideHistory = () => {
     fetchRides();
   }, []);
 
-  if (loading) return <p>Loading ride history...</p>;
-  if (rides.length === 0) return <p>No past rides found.</p>;
+  if (loading) return <p style={{margin:"90px"}}>Loading ride history...</p>;
+  if (rides.length === 0) return <p style={{margin:"90px"}}>No past rides found.</p>;
 
   return (
-    <div className="ride-history-container">
+    <div className="ride-history-container" style={{margin:"90px"}}>
       <h2>Ride History</h2>
       {rides.map((ride) => (
         <div key={ride.id} className="ride-card">

@@ -1,60 +1,145 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { Link } from 'react-router-dom';
-import '../Index.css'; // Import custom CSS
 
-const Vehicleform = ({ fetchclient, selectedclient, setSelectedclient }) => {
-  const [form, setForm] = useState({ name: "", vehicletype: "", location: "", status: "" });
+const Vehicleform = () => {
+  const [vehicleData, setVehicleData] = useState({
+    Brand: '',
+    Model: '',
+    vehicletype: '',
+    location: '',
+    price: '',
+    Fuel: '',
+    status: '',
+    image: '',
+    Description: ''
+  });
 
-  useEffect(() => {
-    if (selectedclient) setForm(selectedclient);
-  }, [selectedclient]);
-
-  const hc = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const hs = async (e) => {
-    e.preventDefault();
-    if (selectedclient) {
-      await axios.put(`http://localhost:5700/api/users/${selectedclient._id}`, form);
-      setSelectedclient(null);
+  const handleChange = (e) => {
+    if (e.target.name === "image") {
+      setVehicleData({ ...vehicleData, image: e.target.files[0] }); // Image is File
     } else {
-      await axios.post('http://localhost:5700/api/users', form);
+      setVehicleData({ ...vehicleData, [e.target.name]: e.target.value });
     }
-    setForm({ name: "", vehicletype: "", location: "", status: "" });
-    fetchclient();
   };
 
-  return<>
-      <div className="form-container d-flex justify-content-center align-items-center">
-      <form className="vehicle-form shadow p-4 rounded" onSubmit={hs}>
-        <div className="d-flex justify-content-end">
-          <Link to='/' className="close-icon">
-            <i className="fas fa-times"></i>
-          </Link>
-        </div>
 
-        <h3 className="text-center mb-4">{selectedclient ? "Update Details" : "Add User"}</h3>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        {["name", "vehicletype", "location", "status"].map((field, idx) => (
-          <div className='form-group mb-3' key={idx}>
-            <label className='form-label text-capitalize'>{field}:</label>
-            <input
-              type='text'
-              name={field}
-              placeholder={`Enter ${field}...`}
-              onChange={hc}
-              className='form-control modern-input'
-              value={form[field]}
-            />
+    try {
+      const formData = new FormData();
+
+      // Append all text fields
+      formData.append("Brand", vehicleData.Brand);
+      formData.append("Model", vehicleData.Model);
+      formData.append("vehicletype", vehicleData.vehicletype);
+      formData.append("location", vehicleData.location);
+      formData.append("price", vehicleData.price);
+      formData.append("Fuel", vehicleData.Fuel);
+      formData.append("status", vehicleData.status);
+      formData.append("Description", vehicleData.Description);
+
+      // ✅ Append image only if available
+      if (vehicleData.image) {
+        formData.append("image", vehicleData.image);
+      }
+
+      const res = await axios.post("http://localhost:5700/api/vehicle/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert("Vehicle added successfully!");
+      setVehicleData({
+        Brand: '',
+        Model: '',
+        vehicletype: '',
+        location: '',
+        price: '',
+        Fuel: '',
+        image: '', // reset image
+        status: '',
+        Description: ''
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Failed to add vehicle");
+    }
+  };
+
+  return <>
+    <div className="container  d-flex justify-content-center" style={{ marginTop: "90px" }}>
+      <div className="card shadow-lg p-4" style={{ maxWidth: '600px', width: '100%' }}>
+        <h3 className="text-center mb-4">
+          <i className="fas fa-motorcycle me-2"></i> Upload Vehicle
+        </h3>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label"><i className="fas fa-industry me-2"></i>Brand</label>
+            <input type="text" className="form-control" name="Brand" value={vehicleData.Brand} onChange={handleChange} required />
           </div>
-        ))}
 
-        <button type='submit' className="btn btn-primary w-100 mt-3">
-          {selectedclient ? "Update" : "Add"} Client
-        </button>
-      </form>
+          <div className="mb-3">
+            <label className="form-label"><i className="fas fa-car me-2"></i>Model</label>
+            <input type="text" className="form-control" name="Model" value={vehicleData.Model} onChange={handleChange} required />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label"><i className="fas fa-list-alt me-2"></i>Vehicle Type</label>
+            <input type="text" className="form-control" name="vehicletype" value={vehicleData.vehicletype} onChange={handleChange} required />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label"><i className="fas fa-map-marker-alt me-2"></i>Location</label>
+            <input type="text" className="form-control" name="location" value={vehicleData.location} onChange={handleChange} required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">
+              <i className="fas fa-cogs me-2"></i>Status
+            </label>
+            <select className="form-select" name="status" value={vehicleData.status} onChange={handleChange} required>
+              <option value="">Selest status</option>
+              <option value="available">Available</option>
+              <option value="rented">Rented</option>
+              <option value="maintenance">Maintenance</option>
+            </select>
+          </div>
+
+
+          <div className="mb-3">
+            <label className="form-label"><i className="fas fa-rupee-sign me-2"></i>Price</label>
+            <input type="number" className="form-control" name="price" value={vehicleData.price} onChange={handleChange} required />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label"><i className="fas fa-gas-pump me-2"></i>Fuel Type</label>
+            <select className="form-select" name="Fuel" value={vehicleData.Fuel} onChange={handleChange} required>
+              <option value="">Select Fuel Type</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Electric">Electric</option>
+              <option value="Hybrid">Hybrid</option>
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label"><i className="fas fa-image me-2"></i>Image URL</label>
+            <input type="file" className="form-control" name="image" onChange={handleChange} />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label"><i className="fas fa-align-left me-2"></i>Description</label>
+            <textarea className="form-control" rows="3" name="Description" value={vehicleData.Description} onChange={handleChange} required></textarea>
+          </div>
+
+          <div className="text-center">
+            <button type="submit" className="btn btn-primary">
+              <i className="fas fa-upload me-2"></i>Upload
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </>
 };
