@@ -1,0 +1,16 @@
+.footer {
+  font-size: 14px;
+}
+
+.footer h5 {
+  margin-bottom: 15px;
+}
+
+.footer .social-icons a {
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.footer .social-icons a:hover {
+  color: #ffcc00;
+}

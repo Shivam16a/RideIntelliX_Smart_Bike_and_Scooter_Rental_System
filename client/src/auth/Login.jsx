@@ -13,8 +13,29 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5700/api/auth/login', form);
-      localStorage.setItem('token', res.data.token);
-      navigate('/dashboard');
+
+      const token = res.data.token;
+
+      // Save token and user info
+      localStorage.setItem('token', token);
+
+      // Call /me to get role
+      const userRes = await axios.get("http://localhost:5700/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const role = userRes.data.role;
+
+      //  Redirect based on role
+      if (role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+
+
     } catch (err) {
       alert('Login failed');
       console.error(err);

@@ -7,6 +7,13 @@ import Register from './auth/Register';
 import Admin from './components/Admin';
 import RideHistory from './profile/RideHistory';
 import Card from './cards/Card';
+import Banner from './cards/Banner';
+import Userprofile from './profile/Userprofile';
+import About from './components/About';
+import Contact from './components/Contact';
+import Bookingform from './components/Bookingform';
+import Payment from './components/Payment';
+import Usersform from './Admindashboard/Usersform';
 const App = () => {
   const [searchTerm, setSearchTerm] = React.useState("");
   return <>
@@ -18,6 +25,13 @@ const App = () => {
       <Route path='/admin' element={<Admin/>}/>
       <Route path='/ridehistory' element={<RideHistory/>}/>
       <Route path='/card' element={<Card/>}/>
+      <Route path='/userprofile' element={<Userprofile/>}/>
+      <Route path='/' element={<Banner/>}/>
+      <Route path='/about' element={<About/>}/>
+      <Route path='/contact' element={<Contact/>}/>
+      <Route path='/book/:id' element={<Bookingform/>}/>
+      <Route path='/payment' element={<Payment/>}/>
+      <Route path='/users' element={<Usersform/>}/>
     </Routes>
   </BrowserRouter>
 

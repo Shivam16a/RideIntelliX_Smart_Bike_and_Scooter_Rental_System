@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Contact from '../components/Contact';
+
 
 const Wallet = () => {
   const [balance, setBalance] = useState(0);
@@ -31,7 +33,7 @@ const Wallet = () => {
     alert(`₹${amount} added to wallet`);
   };
 
-  return (
+  return <>
     <div className="wallet-container" style={{margin:"90px"}}>
       <h2>My Wallet</h2>
       <div className="wallet-balance">
@@ -48,7 +50,8 @@ const Wallet = () => {
         <button type="submit">Add Funds</button>
       </form>
     </div>
-  );
+    <Contact/>
+  </>
 };
 
 export default Wallet;

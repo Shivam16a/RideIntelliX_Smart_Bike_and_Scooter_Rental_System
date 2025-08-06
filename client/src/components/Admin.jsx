@@ -4,24 +4,36 @@ import Vehicleform from '../vehicles/Vehicleform';
 import Vehiclelist from '../vehicles/Vehiclelist';
 
 const Admin = () => {
-  const [clients, setClients] = useState([]);
-  const [seletedclient, setSelectedclient] = useState(null);
+  const [vehicles, setVehicles] = useState([]);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
 
-  const fetchclients = async () => {
-    const res = await axios.get('http://localhost:5700/api/vehicle');
-    setClients(res.data);
+  const fetchVehicles = async () => {
+    try {
+      const res = await axios.get('http://localhost:5700/api/vehicle');
+      setVehicles(res.data);
+    } catch (err) {
+      console.error('Failed to fetch vehicles:', err);
+    }
   };
-  useEffect(() => {
-    fetchclients();
-  }, []);
-  return <>
-    <Vehicleform fetchclient={fetchclients} selectedclient={seletedclient} setSelectedclient={setSelectedclient} />
-    <Vehiclelist
-      clients={clients}
-      fetchclients={fetchclients}
-      setSelectedclient={setSelectedclient}
-    />
-  </>
-}
 
-export default Admin
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
+
+  return (
+    <>
+      <Vehicleform
+        fetchVehicle={fetchVehicles}
+        selectedVehicle={selectedVehicle}
+        setSelectedVehicle={setSelectedVehicle}
+      />
+      <Vehiclelist
+        vehicle={vehicles}
+        fetchVehicle={fetchVehicles}
+        setSelectedVehicle={setSelectedVehicle}
+      />
+    </>
+  );
+};
+
+export default Admin;

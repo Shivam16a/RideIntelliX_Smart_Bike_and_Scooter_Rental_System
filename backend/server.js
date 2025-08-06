@@ -5,7 +5,9 @@ const connectdb = require("./config/db");
 const VehicleRoutes = require("./routes/vehicleRoutes");
 const autRoutes = require('./routes/UsersRoutes');
 const booking = require('./routes/bookingRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 const path = require('path');
+const createAdminIfNotExists = require('./admin/admin');
 
 
 const errorMiddleware = require('./middleware/errorMiddleware');
@@ -20,8 +22,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/vehicle",VehicleRoutes);
 app.use("/api/auth",autRoutes);
 app.use("/api/booking",booking);
+app.use('/api/payment', paymentRoutes);
 
-
+createAdminIfNotExists();
 
 
 

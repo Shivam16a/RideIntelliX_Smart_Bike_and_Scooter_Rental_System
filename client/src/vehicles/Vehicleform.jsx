@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from "axios";
 
-const Vehicleform = () => {
+const Vehicleform = ({ fetchVehicles, selectedVehicle, setSelectedVehicle }) => {
   const [vehicleData, setVehicleData] = useState({
     Brand: '',
     Model: '',
@@ -14,43 +14,65 @@ const Vehicleform = () => {
     Description: ''
   });
 
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedVehicle) {
+      setVehicleData({
+        Brand: selectedVehicle.Brand || '',
+        Model: selectedVehicle.Model || '',
+        vehicletype: selectedVehicle.vehicletype || '',
+        location: selectedVehicle.location || '',
+        price: selectedVehicle.price || '',
+        Fuel: selectedVehicle.Fuel || '',
+        status: selectedVehicle.status || '',
+        image: '',
+        Description: selectedVehicle.Description || ''
+      });
+    }
+  }, [selectedVehicle]);
+
   const handleChange = (e) => {
-    if (e.target.name === "image") {
-      setVehicleData({ ...vehicleData, image: e.target.files[0] }); // Image is File
+    const { name, value, files } = e.target;
+    if (name === "image") {
+      setVehicleData({ ...vehicleData, image: files[0] });
     } else {
-      setVehicleData({ ...vehicleData, [e.target.name]: e.target.value });
+      setVehicleData({ ...vehicleData, [name]: value });
     }
   };
 
-
   const handleSubmit = async (e) => {
+    const token = localStorage.getItem('token');
     e.preventDefault();
 
+    const formData = new FormData();
+
+    for (const key in vehicleData) {
+      if (key === "image") continue;
+      formData.append(key, vehicleData[key]);
+    }
+
+    if (vehicleData.image) {
+      formData.append("image", vehicleData.image);
+    }
+
     try {
-      const formData = new FormData();
-
-      // Append all text fields
-      formData.append("Brand", vehicleData.Brand);
-      formData.append("Model", vehicleData.Model);
-      formData.append("vehicletype", vehicleData.vehicletype);
-      formData.append("location", vehicleData.location);
-      formData.append("price", vehicleData.price);
-      formData.append("Fuel", vehicleData.Fuel);
-      formData.append("status", vehicleData.status);
-      formData.append("Description", vehicleData.Description);
-
-      // ✅ Append image only if available
-      if (vehicleData.image) {
-        formData.append("image", vehicleData.image);
+      if (selectedVehicle) {
+        await axios.put(
+          `http://localhost:5700/api/vehicle/update/${selectedVehicle._id}`,
+          formData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        alert("Vehicle updated successfully!");
+      } else {
+        await axios.post("http://localhost:5700/api/vehicle/add", formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        alert("Vehicle added successfully!");
       }
 
-      const res = await axios.post("http://localhost:5700/api/vehicle/add", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      alert("Vehicle added successfully!");
       setVehicleData({
         Brand: '',
         Model: '',
@@ -58,21 +80,26 @@ const Vehicleform = () => {
         location: '',
         price: '',
         Fuel: '',
-        image: '', // reset image
         status: '',
+        image: '',
         Description: ''
       });
+
+      if (fileInputRef.current) fileInputRef.current.value = null;
+
+      if (fetchVehicles) fetchVehicles();
+      if (setSelectedVehicle) setSelectedVehicle(null);
     } catch (error) {
       console.error(error);
-      alert("Failed to add vehicle");
+      alert("Operation failed");
     }
   };
 
-  return <>
-    <div className="container  d-flex justify-content-center" style={{ marginTop: "90px" }}>
+  return (
+    <div className="container d-flex justify-content-center" style={{ marginTop: "90px" }}>
       <div className="card shadow-lg p-4" style={{ maxWidth: '600px', width: '100%' }}>
         <h3 className="text-center mb-4">
-          <i className="fas fa-motorcycle me-2"></i> Upload Vehicle
+          <i className="fas fa-motorcycle me-2"></i>{selectedVehicle ? "Update Vehicle" : "Upload Vehicle"}
         </h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -94,18 +121,16 @@ const Vehicleform = () => {
             <label className="form-label"><i className="fas fa-map-marker-alt me-2"></i>Location</label>
             <input type="text" className="form-control" name="location" value={vehicleData.location} onChange={handleChange} required />
           </div>
+
           <div className="mb-3">
-            <label className="form-label">
-              <i className="fas fa-cogs me-2"></i>Status
-            </label>
+            <label className="form-label"><i className="fas fa-cogs me-2"></i>Status</label>
             <select className="form-select" name="status" value={vehicleData.status} onChange={handleChange} required>
-              <option value="">Selest status</option>
+              <option value="">Select status</option>
               <option value="available">Available</option>
               <option value="rented">Rented</option>
               <option value="maintenance">Maintenance</option>
             </select>
           </div>
-
 
           <div className="mb-3">
             <label className="form-label"><i className="fas fa-rupee-sign me-2"></i>Price</label>
@@ -124,8 +149,8 @@ const Vehicleform = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label"><i className="fas fa-image me-2"></i>Image URL</label>
-            <input type="file" className="form-control" name="image" onChange={handleChange} />
+            <label className="form-label"><i className="fas fa-image me-2"></i>Upload Image</label>
+            <input type="file" className="form-control" name="image" onChange={handleChange} ref={fileInputRef} />
           </div>
 
           <div className="mb-3">
@@ -135,13 +160,14 @@ const Vehicleform = () => {
 
           <div className="text-center">
             <button type="submit" className="btn btn-primary">
-              <i className="fas fa-upload me-2"></i>Upload
+              <i className={`fas ${selectedVehicle ? "fa-save" : "fa-upload"} me-2`}></i>
+              {selectedVehicle ? "Update" : "Upload"}
             </button>
           </div>
         </form>
       </div>
     </div>
-  </>
+  );
 };
 
 export default Vehicleform;

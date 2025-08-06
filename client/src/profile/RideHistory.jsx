@@ -1,65 +1,94 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const RideHistory = () => {
-  const [rides, setRides] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const [bookings, setBookings] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
+
+  // Fetch all vehicles
+  const fetchVehicles = async () => {
+    try {
+      const res = await axios.get('http://localhost:5700/api/vehicle');
+      setVehicles(res.data);
+    } catch (error) {
+      console.error('Error fetching vehicles:', error);
+    }
+  };
+
+  // Fetch user bookings
+  const fetchBookings = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get("http://localhost:5700/api/booking/mybookings", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setBookings(res.data);
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+    }
+  };
 
   useEffect(() => {
-    // Simulate fetching ride history from an API
-    const fetchRides = async () => {
-      const mockRides = [
-        {
-          id: 1,
-          vehicleType: 'Scooter',
-          model: 'TVS Jupiter',
-          startTime: '2025-07-20 10:30 AM',
-          endTime: '2025-07-20 11:15 AM',
-          duration: '45 mins',
-          cost: 60,
-          pickup: 'Indiranagar',
-          drop: 'MG Road',
-        },
-        {
-          id: 2,
-          vehicleType: 'Bike',
-          model: 'Bajaj Pulsar 150',
-          startTime: '2025-07-18 3:00 PM',
-          endTime: '2025-07-18 4:00 PM',
-          duration: '1 hour',
-          cost: 90,
-          pickup: 'Koramangala',
-          drop: 'HSR Layout',
-        }
-      ];
-
-      setTimeout(() => {
-        setRides(mockRides);
-        setLoading(false);
-      }, 1000);
-    };
-
-    fetchRides();
+    fetchVehicles();
+    fetchBookings();
   }, []);
 
-  if (loading) return <p style={{margin:"90px"}}>Loading ride history...</p>;
-  if (rides.length === 0) return <p style={{margin:"90px"}}>No past rides found.</p>;
+  // Get full vehicle details for a booking
+  const getVehicleDetails = (vehicleId) => {
+    return vehicles.find(v => v._id === vehicleId);
+  };
 
-  return (
-    <div className="ride-history-container" style={{margin:"90px"}}>
-      <h2>Ride History</h2>
-      {rides.map((ride) => (
-        <div key={ride.id} className="ride-card">
-          <h3>{ride.vehicleType} - {ride.model}</h3>
-          <p><strong>From:</strong> {ride.pickup}</p>
-          <p><strong>To:</strong> {ride.drop}</p>
-          <p><strong>Start:</strong> {ride.startTime}</p>
-          <p><strong>End:</strong> {ride.endTime}</p>
-          <p><strong>Duration:</strong> {ride.duration}</p>
-          <p><strong>Cost:</strong> ₹{ride.cost}</p>
+
+  return <>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">My Booking History</h2>
+      {bookings.length === 0 ? (
+        <p>No bookings found.</p>
+      ) : (
+        <div className="table-responsive shadow p-3 border rounded">
+          <table className="table table-striped">
+            <thead className="thead-dark">
+              <tr>
+                <th>Vehicle</th>
+                <th>Pickup</th>
+                <th>Drop</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bookings.map((booking, index) => {
+                const vehicle = getVehicleDetails(booking.vehicle);
+                return (
+                  <tr key={index}>
+                    <td>{vehicle ? `${vehicle.Brand} ${vehicle.Model}` : 'N/A'}</td>
+                    <td>{booking.pickup}</td>
+                    <td>{booking.drop}</td>
+                    <td>{new Date(booking.startDate).toLocaleDateString()}</td>
+                    <td>{new Date(booking.endDate).toLocaleDateString()}</td>
+                    <td>₹{booking.total}</td>
+                    <td>{booking.payment}</td>
+                    <td>
+                      <span className={`badge ${booking.status === 'Cancelled' ? 'bg-danger' : 'bg-success'}`}>
+                        {booking.status || 'Confirmed'}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-      ))}
+      )}
     </div>
-  );
-};
+  </>
+}
 
-export default RideHistory;
+export default RideHistory
+

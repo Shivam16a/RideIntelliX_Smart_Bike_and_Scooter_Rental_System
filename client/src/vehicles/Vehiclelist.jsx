@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const Vehiclelist = ({ vehicle, fetchVehicle, setSelectedVehicle }) => {
+const Vehiclelist = ({ setSelectedVehicle }) => {
   const [vehicles, setVehicles] = useState([]);
 
-  useEffect(() => {
+  const fetchVehicles = () => {
     axios
-      .get("http://localhost:5700/api/vehicle") // update if needed
+      .get("http://localhost:5700/api/vehicle")
       .then((res) => setVehicles(res.data))
       .catch((err) => console.error("Error fetching vehicles", err));
+  };
+
+  useEffect(() => {
+    fetchVehicles();
   }, []);
 
   const handleDelete = async (id) => {
@@ -16,9 +20,7 @@ const Vehiclelist = ({ vehicle, fetchVehicle, setSelectedVehicle }) => {
       try {
         await axios.delete(`http://localhost:5700/api/vehicle/${id}`);
         alert("Vehicle deleted successfully!");
-        axios.get("http://localhost:5700/api/vehicle")
-          .then((res) => setVehicles(res.data))
-          .catch((err) => console.error("Error fetching vehicles", err));
+        fetchVehicles();
       } catch (error) {
         console.error("Error deleting vehicle:", error);
         alert("Failed to delete vehicle.");
@@ -26,12 +28,12 @@ const Vehiclelist = ({ vehicle, fetchVehicle, setSelectedVehicle }) => {
     }
   };
 
-  const handleEdit = (x) => {
-    setSelectedVehicle(x); // Set the selected vehicle in Admin's state for editing
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top to show the form
+  const handleEdit = (vehicle) => {
+    setSelectedVehicle(vehicle);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  return <>
+  return (
     <div className="container my-5">
       <h2 className="text-center mb-4">
         <i className="fa fa-motorcycle me-2"></i>
@@ -54,7 +56,7 @@ const Vehiclelist = ({ vehicle, fetchVehicle, setSelectedVehicle }) => {
                 </h5>
                 <p className="card-text mb-1">
                   <i className="fa fa-map-marker-alt me-2 text-danger"></i>
-                  <strong>Location in:</strong> {vehicle.location}
+                  <strong>Location:</strong> {vehicle.location}
                 </p>
                 <p className="card-text mb-1">
                   <i className="fa fa-cogs me-2 text-secondary"></i>
@@ -73,25 +75,25 @@ const Vehiclelist = ({ vehicle, fetchVehicle, setSelectedVehicle }) => {
                   <strong>Price/d:</strong> ₹{vehicle.price}
                 </p>
                 <p className="card-text mt-2">
-                  <strong>Description:</strong><br />{vehicle.Description}
+                  <strong>Description:</strong><br />
+                  {vehicle.Description}
                 </p>
               </div>
-              <div className="card-footer text-center bg-white border-0">
-                <button className="btn btn-primary w-100">
+
+              <div className="card-footer bg-white border-0 d-grid gap-2">
+                <button className="btn btn-primary" disabled>
                   <i className="fa fa-shopping-cart me-2"></i>
                   Buy / Rent
                 </button>
-              </div>
-              <div className="card-footer text-center bg-white border-0">
-                <button className="btn btn-danger w-100" onClick={() => handleDelete(vehicle._id)}>
-                  <i className="fa fa-trash me-2"></i>
-                  Delete
-                </button>
-              </div>
-              <div className="card-footer text-center bg-white border-0">
-                <button className="btn btn-warning w-100" onClick={() => handleEdit(vehicle)}>
+
+                <button className="btn btn-warning" onClick={() => handleEdit(vehicle)}>
                   <i className="fa fa-pen me-2"></i>
                   Edit
+                </button>
+
+                <button className="btn btn-danger" onClick={() => handleDelete(vehicle._id)}>
+                  <i className="fa fa-trash me-2"></i>
+                  Delete
                 </button>
               </div>
             </div>
@@ -99,7 +101,7 @@ const Vehiclelist = ({ vehicle, fetchVehicle, setSelectedVehicle }) => {
         ))}
       </div>
     </div>
-  </>
-}
+  );
+};
 
-export default Vehiclelist
+export default Vehiclelist;
