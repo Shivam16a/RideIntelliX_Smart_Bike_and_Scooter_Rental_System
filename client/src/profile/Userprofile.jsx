@@ -52,7 +52,7 @@ const Userprofile = () => {
               <p><i className="fas fa-map-marker-alt me-2"></i>Location: {user.address || 'Not Provided'}</p>
               <p><i className="fas fa-calendar-alt me-2"></i>Joined On: {new Date(user.createdAt).toLocaleDateString()}</p>
               <p><i className="fas fa-user-tag me-2"></i>Role: {user.role}</p>
-              <p><i className="fas fa-history me-2"></i>Booking History: <span className="text-muted">No any booking available</span></p>
+              
               {user.role === 'admin' && (
                 <div className="d-flex flex-column align-items-center gap-2 mt-3">
                   <button className="btn btn-primary w-75" onClick={() => navigate('/admin')}>
@@ -61,9 +61,7 @@ const Userprofile = () => {
                   <button className="btn btn-secondary w-75" onClick={() => navigate('/users')}>
                     <i className="fas fa-users me-2"></i>Users
                   </button>
-                  <button className="btn btn-info w-75 text-white">
-                    <i className="fas fa-history me-2"></i>All Ride History
-                  </button>
+                  
                 </div>
               )}
 

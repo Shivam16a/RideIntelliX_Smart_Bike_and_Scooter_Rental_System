@@ -60,6 +60,29 @@ exports.updateBookingStatus = async (req, res, next) => {
     }
 };
 
+exports.updateBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    // Use correct field names based on your schema
+    booking.pickupLocation = req.body.pickupLocation || booking.pickupLocation;
+    booking.dropLocation = req.body.dropLocation || booking.dropLocation;
+    booking.startTime = req.body.startTime || booking.startTime;
+    booking.endTime = req.body.endTime || booking.endTime;
+    booking.totalAmount = req.body.totalAmount || booking.totalAmount;
+    booking.bookingStatus = req.body.bookingStatus || booking.bookingStatus;
+
+    const updated = await booking.save();
+    res.json(updated);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Update failed' });
+  }
+};
+
 // Delete booking
 exports.deleteBooking = async (req, res, next) => {
     try {

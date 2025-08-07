@@ -2,7 +2,7 @@ import React from 'react';
 import './Footer.css';
 
 const Footer = () => {
-  return (
+  return <>
     <footer className="footer bg-dark text-light pt-4">
       <div className="container text-center text-md-left">
         <div className="row">
@@ -39,7 +39,7 @@ const Footer = () => {
         © {new Date().getFullYear()} RideIntelliX. All Rights Reserved.
       </div>
     </footer>
-  );
+  </>
 };
 
 export default Footer;

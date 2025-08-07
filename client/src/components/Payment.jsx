@@ -64,11 +64,11 @@ const Payment = () => {
     loadRazorpay();
   }, [amount, bookingId, navigate]);
 
-  return (
+  return <>
     <div className="container text-center mt-5">
       <h2 style={{ marginTop: "90px" }}>Redirecting to Payment Gateway...</h2>
     </div>
-  );
+  </>
 };
 
 export default Payment;

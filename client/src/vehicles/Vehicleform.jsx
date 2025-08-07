@@ -95,7 +95,7 @@ const Vehicleform = ({ fetchVehicles, selectedVehicle, setSelectedVehicle }) => 
     }
   };
 
-  return (
+  return <>
     <div className="container d-flex justify-content-center" style={{ marginTop: "90px" }}>
       <div className="card shadow-lg p-4" style={{ maxWidth: '600px', width: '100%' }}>
         <h3 className="text-center mb-4">
@@ -167,7 +167,7 @@ const Vehicleform = ({ fetchVehicles, selectedVehicle, setSelectedVehicle }) => 
         </form>
       </div>
     </div>
-  );
+  </>
 };
 
 export default Vehicleform;

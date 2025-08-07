@@ -33,7 +33,7 @@ const Vehiclelist = ({ setSelectedVehicle }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  return (
+  return <>
     <div className="container my-5">
       <h2 className="text-center mb-4">
         <i className="fa fa-motorcycle me-2"></i>
@@ -101,7 +101,7 @@ const Vehiclelist = ({ setSelectedVehicle }) => {
         ))}
       </div>
     </div>
-  );
+  </>
 };
 
 export default Vehiclelist;

@@ -20,20 +20,18 @@ const Admin = () => {
     fetchVehicles();
   }, []);
 
-  return (
-    <>
-      <Vehicleform
-        fetchVehicle={fetchVehicles}
-        selectedVehicle={selectedVehicle}
-        setSelectedVehicle={setSelectedVehicle}
-      />
-      <Vehiclelist
-        vehicle={vehicles}
-        fetchVehicle={fetchVehicles}
-        setSelectedVehicle={setSelectedVehicle}
-      />
-    </>
-  );
+  return <>
+    <Vehicleform
+      fetchVehicle={fetchVehicles}
+      selectedVehicle={selectedVehicle}
+      setSelectedVehicle={setSelectedVehicle}
+    />
+    <Vehiclelist
+      vehicle={vehicles}
+      fetchVehicle={fetchVehicles}
+      setSelectedVehicle={setSelectedVehicle}
+    />
+  </>
 };
 
 export default Admin;
