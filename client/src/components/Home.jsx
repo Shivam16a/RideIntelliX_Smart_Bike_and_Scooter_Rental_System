@@ -67,7 +67,7 @@ const Home = () => {
               )}
 
               <li className="nav-item">
-                <Link className="nav-link at" to="/about">About Us</Link>
+                <Link className="nav-link at" to="/about">About</Link>
               </li>
 
               <li className="nav-item">
