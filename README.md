@@ -102,7 +102,7 @@ RideIntelliX/
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/Shivam16a/RideIntelliX_Smart_Bike_and_Scooter_Rental_System.git](https://github.com/Shivam16a/RideIntelliX_Smart_Bike_and_Scooter_Rental_System.git)
+git clone https://github.com/Shivam16a/RideIntelliX_Smart_Bike_and_Scooter_Rental_System.git
 cd RideIntelliX
 
 ```
