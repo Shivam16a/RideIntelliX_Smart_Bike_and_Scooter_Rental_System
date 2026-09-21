@@ -14,6 +14,7 @@ import Contact from './components/Contact';
 import Bookingform from './components/Bookingform';
 import Payment from './components/Payment';
 import Usersform from './Admindashboard/Usersform';
+import Vehiclelist from './vehicles/Vehiclelist';
 const App = () => {
   const [searchTerm, setSearchTerm] = React.useState("");
   return <>
@@ -28,6 +29,7 @@ const App = () => {
       <Route path='/userprofile' element={<Userprofile/>}/>
       <Route path='/' element={<Banner/>}/>
       <Route path='/about' element={<About/>}/>
+      <Route path='/updatebike' element={<Vehiclelist/>}/>
       <Route path='/contact' element={<Contact/>}/>
       <Route path='/book/:id' element={<Bookingform/>}/>
       <Route path='/payment' element={<Payment/>}/>

@@ -47,7 +47,7 @@ const Payment = () => {
             { headers: { Authorization: `Bearer ${token}` } }
           );
           alert("Payment successful!");
-          navigate("/mybookings");
+          navigate("/");
         },
         prefill: {
           name: "Customer",

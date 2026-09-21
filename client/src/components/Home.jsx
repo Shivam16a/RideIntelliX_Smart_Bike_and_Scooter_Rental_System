@@ -55,9 +55,14 @@ const Home = () => {
                 <Link className="nav-link hm" to="/">Home</Link>
               </li>
               {user && user.role === 'admin' && (
-                <li className="nav-item">
+                <>
+                  <li className="nav-item">
                   <Link className="nav-link at" to="/userprofile">Admin-Profile</Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link at" to="/updatebike">Edit-vehicle</Link>
+                </li>
+                </>
               )}
 
               {user && user.role !== 'admin' && (
